@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>תרגול חשבון בסגנון קהוט</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#007bff">
+  <style>
+    :root { --primary: #007bff; --primary-dark: #0056b3; --success: #28a745; --error: #dc3545; --bg: #f0f4f8; --card: #fff; --text: #333; --shadow: rgba(0,0,0,0.1); --radius: 8px; --transition: 0.3s; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--text); direction:rtl; line-height:1.5; padding:1rem; }
+    h1,h2 { text-align:center; color:var(--primary); }
+    main { max-width:600px; margin:auto; }
+    section { background:var(--card); border-radius:var(--radius); box-shadow:0 2px 6px var(--shadow); margin-bottom:1.5rem; padding:1rem; }
+    fieldset { border:1px solid #ccc; border-radius:var(--radius); padding:1rem; margin-bottom:1rem; }
+    legend { font-weight:bold; }
+    .input-group { display:flex; gap:.5rem; align-items:center; margin-bottom:.75rem; }
+    input[type="number"] { width:4rem; padding:.3rem; border:1px solid #ccc; border-radius:var(--radius); }
+    button { font-size:1rem; padding:.75rem; border:none; border-radius:var(--radius); cursor:pointer; transition:transform var(--transition),background var(--transition); }
+    button.primary { background:var(--primary); color:#fff; width:100%; }
+    button.primary:hover { background:var(--primary-dark); transform:translateY(-2px); }
+    #question { background:var(--card); border-radius:var(--radius); padding:1rem; margin:1rem 0; font-size:1.5em; text-align:center; box-shadow:0 1px 4px var(--shadow); direction:ltr; unicode-bidi:embed; }
+    .option-btn { background:#ddd; color:#000; display:block; width:100%; margin:.5rem 0; padding:.75rem; font-size:1.1em; text-align:center; }
+    .option-btn:hover { transform:translateY(-1px); filter:brightness(1.05); }
+    .correct { background:var(--success)!important; color:#fff!important; }
+    .wrong { background:var(--error)!important; color:#fff!important; }
+    #timer { text-align:center; font-size:1.1em; margin-bottom:1rem; }
+    .progress-wrapper { display:flex; align-items:center; gap:.5rem; margin-bottom:1rem; }
+    progress { flex:1; appearance:none; height:1rem; }
+    progress::-webkit-progress-bar { background:#eee; border-radius:var(--radius); }
+    progress::-webkit-progress-value { background:var(--primary); border-radius:var(--radius); }
+    #resultsList { list-style:none; padding:0; }
+    #resultsList li { background:#e9ecef; margin:.5rem 0; padding:.75rem; border-radius:var(--radius); }
+    @media(max-width:600px){#question{font-size:1.2em;}button{font-size:.9em;}}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>תרגול חשבון בסגנון קהוט</h1>
+    <section id="setup">
+      <h2>הגדרות התרגול</h2>
+      <fieldset><legend>בחר סוג תרגילים</legend>
+        <label><input type="checkbox" name="type" value="add"> חיבור</label>
+        <label><input type="checkbox" name="type" value="sub"> חיסור</label>
+        <label><input type="checkbox" name="type" value="mul"> כפל</label>
+        <label><input type="checkbox" name="type" value="div"> חילוק</label>
+        <label><input type="checkbox" name="type" value="mix"> ערבוב</label>
+      </fieldset>
+      <div class="input-group"><label for="min">מ</label><input type="number" id="min" min="0" value="1"><label for="max">עד</label><input type="number" id="max" min="0" value="10"></div>
+      <div class="input-group"><label for="count">כמות תרגילים</label><input type="number" id="count" min="1" value="5"></div>
+      <div class="input-group"><label for="timePerQ">זמן לשאלה (ש')</label><input type="number" id="timePerQ" min="1" value="15"></div>
+      <button id="start" class="primary">התחל בתרגול</button>
+    </section>
+    <section id="quiz" class="hidden">
+      <h2>תרגיל <span id="currentNum"></span> מתוך <span id="totalNum"></span></h2>
+      <div class="progress-wrapper"><progress id="progress" max="100" value="0"></progress><span id="progressText">0%</span></div>
+      <div id="timer">זמן נותר: <span id="timeDisplay"></span> ש'</div>
+      <div id="question" role="alert"></div>
+      <div id="options" role="group" aria-labelledby="question"></div>
+      <button id="next" class="primary hidden">המשך לתרגיל הבא</button>
+    </section>
+    <section id="results" class="hidden">
+      <h2>התוצאות שלך</h2>
+      <p id="scoreText" style="text-align:center;font-size:1.2em;"></p>
+      <ul id="resultsList"></ul>
+      <button id="restart" class="primary">נסה שוב</button>
+    </section>
+  </main>
+  <script>
+    (() => {
+      const setupEl = document.getElementById('setup'), quizEl = document.getElementById('quiz'), resultsEl = document.getElementById('results');
+      const startBtn = document.getElementById('start'), nextBtn = document.getElementById('next'), restartBtn = document.getElementById('restart');
+      const currentNumEl = document.getElementById('currentNum'), totalNumEl = document.getElementById('totalNum');
+      const questionEl = document.getElementById('question'), optionsEl = document.getElementById('options');
+      const timerEl = document.getElementById('timeDisplay'), progressBar = document.getElementById('progress'), progressText = document.getElementById('progressText');
+      const scoreText = document.getElementById('scoreText'), resultsList = document.getElementById('resultsList');
+      let exercises = [], userResults = [], currentIndex = 0, perQSec = 15, countdown;
+      const colorPalette = ['#ffadad','#ffd6a5','#caffbf','#9bf6ff'];
+      const rand = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
+      function genExercise(types,min,max){
+        const ops = types.includes('mix')?['add','sub','mul','div']:types;
+        const op=ops[rand(0,ops.length-1)], a=rand(min,max), b=rand(min,max), q, ans;
+        let A=a,B=b; let QQ,AA;
+        switch(op){
+          case 'add': QQ=`${A} + ${B}`; AA=A+B; break;
+          case 'sub': if(A<B)[A,B]=[B,A]; QQ=`${A} - ${B}`; AA=A-B; break;
+          case 'mul': QQ=`${A} × ${B}`; AA=A*B; break;
+          case 'div': B=rand(min,max)||1; A=B*rand(min,max); QQ=`${A} ÷ ${B}`; AA=A/B; break;
+        }
+        return {q:QQ,ans:AA};
+      }
+      startBtn.onclick=()=>{
+        const types=Array.from(setupEl.querySelectorAll('input[name="type"]:checked')).map(i=>i.value);
+        const min=+document.getElementById('min').value, max=+document.getElementById('max').value, count=+document.getElementById('count').value;
+        perQSec=+document.getElementById('timePerQ').value;
+        exercises=Array.from({length:count},()=>genExercise(types,min,max));
+        userResults=[]; currentIndex=0; totalNumEl.textContent=exercises.length;
+        setupEl.classList.add('hidden'); quizEl.classList.remove('hidden'); showQuestion();
+      };
+      nextBtn.onclick=()=>{ currentIndex++; currentIndex<exercises.length?showQuestion():showResults(); };
+      restartBtn.onclick=()=>{ resultsEl.classList.add('hidden'); setupEl.classList.remove('hidden'); resultsList.innerHTML=''; scoreText.textContent=''; };
+      function showQuestion(){
+        clearInterval(countdown);
+        const {q,ans}=exercises[currentIndex];
+        currentNumEl.textContent=currentIndex+1; questionEl.textContent=q; optionsEl.innerHTML='';
+        const choices=new Set([ans]);
+        while(choices.size<4){ const c=rand(ans-10,ans+10); if(c>=0)choices.add(c); }
+        Array.from(choices).sort(()=>Math.random()-0.5).forEach((val,idx)=>{ const btn=document.createElement('button'); btn.textContent=val; btn.className='option-btn'; btn.style.backgroundColor=colorPalette[idx%colorPalette.length]; btn.onclick=()=>selectAnswer(btn,val,ans); optionsEl.append(btn); });
+        const percent=Math.round((currentIndex/exercises.length)*100);
+        progressBar.value=percent; progressText.textContent=percent+'%';
+        let sec=perQSec; timerEl.textContent=sec;
+        countdown=setInterval(()=>{ sec--; timerEl.textContent=sec; if(sec<=0)selectAnswer(null,null,ans); },1000);
+        nextBtn.classList.add('hidden');
+      }
+      function selectAnswer(btn,val,correct){
+        clearInterval(countdown);
+        Array.from(optionsEl.children).forEach(b=>{ b.disabled=true; if(+b.textContent===correct)b.classList.add('correct'); });
+        if(btn&&val!==correct)btn.classList.add('wrong'); userResults.push(btn&&val===correct); nextBtn.classList.remove('hidden');
+      }
+      function showResults(){
+        clearInterval(countdown);
+        quizEl.classList.add('hidden'); resultsEl.classList.remove('hidden');
+        const score=userResults.filter(Boolean).length;
+        scoreText.textContent=`ציון סופי: ${score} מתוך ${exercises.length}`;
+        userResults.forEach((ok,i)=>{ const li=document.createElement('li'); li.textContent=`תרגיל ${i+1}: ${ok?'✅ נכון':'❌ שגוי'}`; resultsList.append(li); });
+      }
+    })();
+  </script>
+</body>
+</html>
