@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://Mordechai-Ben-Ezra.github.io/math-practice-site/sitemap.xml
