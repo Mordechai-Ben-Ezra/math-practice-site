@@ -123,7 +123,7 @@
       <h2>הגדרות התרגול</h2>
       <div class="input-group"><label for="min">מ</label><input id="min" type="number" min="1" value="1"/></div>
       <div class="input-group"><label for="max">עד</label><input id="max" type="number" min="1" value="10"/></div>
-      <div class="input-group"><label for="count">מספר תרגילים</label><input id="count" type="number" min="1" value="20"/></div>
+
       <div class="input-group"><label for="timePerQ">זמן לשאלה (שניות)</label><input id="timePerQ" type="number" min="1" value="12"/></div>
       <button id="applySettings" class="hidden">שמור הגדרות</button>
       <button id="resetScore" class="reset-small">אפס ניקוד</button>
@@ -238,14 +238,14 @@
           scoreEl.textContent=score; mainScoreEl.textContent=score; levelEl.textContent=level;
         }
       });
-      startQuiz.addEventListener('click',()=>{
-        exercises=Array.from({length:settings.count},()=>gen(Array.from(selectedTypes),settings.min,settings.max));
-        answers=[]; userAnswers=[]; currentIndex=0;
-        totalNumEl.textContent=exercises.length;
-        scoreBoard.style.visibility='visible';
-        scoreEl.textContent=score; mainScoreEl.textContent=score; levelEl.textContent=level;
-        showScreen('quiz'); showQuestion();
-      });
+startQuiz.addEventListener('click',()=>{
+    exercises=Array.from({length:settings.count},()=>gen(Array.from(selectedTypes),settings.min,settings.max));
+    answers=[]; userAnswers=[]; currentIndex=0;
+    totalNumEl.textContent=exercises.length;
+    scoreBoard.style.visibility='visible';
+    scoreEl.textContent=score; mainScoreEl.textContent=score; levelEl.textContent=level;
+    showScreen('quiz'); showQuestion();
+});
       restart.addEventListener('click',()=>{ showScreen('mainMenu'); userAnswers=[]; });
       detailClose.addEventListener('click',()=>document.getElementById('detailModal').classList.remove('show'));
       function gen(types,min,max){
@@ -286,52 +286,14 @@
           if(t<=0){ clearInterval(countdown); selectAnswer(null,null,ans); }
         },1000);
       }
-      function selectAnswer(btn,val,correct){
-        clearInterval(countdown);
-        userAnswers.push(val);
-        optionsEl.querySelectorAll('button').forEach(b=>{ b.disabled=true; if(+b.textContent===correct) b.classList.add('correct'); });
-        let delta=0;
-        if(btn&&val===correct){
-          soundC.play();
-          const rawPts=Math.ceil(+timerEl.textContent*2);
-          const pts=Math.min(rawPts,20);
-          score+=pts; delta=pts;
-          scoreEl.textContent=score; mainScoreEl.textContent=score;
-          localStorage.setItem('cumScore',score);
-          if(score>=1000){ score-=1000; level++; localStorage.setItem('level',level); levelEl.textContent=level; }
-          const fly=document.createElement('span'); fly.textContent='+'+pts; fly.className='zigzagUp zigzagPositive'; document.body.appendChild(fly);
-          const r=btn.getBoundingClientRect(); fly.style.left=(r.left+r.width/2)+'px'; fly.style.top=r.top+'px';
-          fly.addEventListener('animationend',()=>fly.remove(),{once:true});
-        } else {
-          if(btn){ btn.classList.add('wrong'); soundW.play(); }
-          score-=4; delta=-4;
-          scoreEl.textContent=score; mainScoreEl.textContent=score;
-          localStorage.setItem('cumScore',score);
-          const flyw=document.createElement('span'); flyw.textContent=delta; flyw.className='zigzagUp zigzagNegative'; document.body.appendChild(flyw);
-          const r=btn?btn.getBoundingClientRect():{left:window.innerWidth/2,width:0,top:window.innerHeight/2};
-          flyw.style.left=(r.left+r.width/2)+'px'; flyw.style.top=r.top+'px';
-          flyw.addEventListener('animationend',()=>flyw.remove(),{once:true});
-        }
-        setTimeout(()=>{
-          if(currentIndex+1<exercises.length){ currentIndex++; showQuestion(); }
-          else {
-            showScreen('results');
-            resultsList.innerHTML='';
-            exercises.forEach((ex,i)=>{
-              const li=document.createElement('li'); li.textContent=`תרגיל ${i+1}`;
-              li.addEventListener('click',()=>{
-                document.getElementById('detailTitle').textContent=`תרגיל ${i+1}`;
-                document.getElementById('detailQuestion').textContent=`שאלה: ${ex.q}`;
-                document.getElementById('detailYour').textContent=`תשובתך: ${userAnswers[i]}`;
-                document.getElementById('detailCorrect').textContent=`תשובה נכונה: ${answers[i]}`;
-                document.getElementById('detailModal').classList.add('show');
-              });
-              resultsList.append(li);
-            });
-            soundCh.play();
-          }
-        },1000);
-      }
+function selectAnswer(btn,val,correct){
+  clearInterval(countdown);
+  if (btn && val===correct) document.getElementById('soundCorrect').play();
+  else if (btn) document.getElementById('soundWrong').play();
+  setTimeout(() => {
+    showQuestion();
+  }, 1000);
+}
     });
   </script>
   <footer>פותח על ידי מרדכי בן עזרא | כל הזכויות שמורות © 2025</footer>
