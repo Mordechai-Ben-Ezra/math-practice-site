@@ -123,7 +123,6 @@
       <h2>הגדרות התרגול</h2>
       <div class="input-group"><label for="min">מ</label><input id="min" type="number" min="1" value="1"/></div>
       <div class="input-group"><label for="max">עד</label><input id="max" type="number" min="1" value="10"/></div>
-
       <div class="input-group"><label for="timePerQ">זמן לשאלה (שניות)</label><input id="timePerQ" type="number" min="1" value="12"/></div>
       <button id="applySettings" class="hidden">שמור הגדרות</button>
       <button id="resetScore" class="reset-small">אפס ניקוד</button>
@@ -238,13 +237,9 @@
           scoreEl.textContent=score; mainScoreEl.textContent=score; levelEl.textContent=level;
         }
       });
-startQuiz.addEventListener('click',()=>{
-    exercises=Array.from({length:settings.count},()=>gen(Array.from(selectedTypes),settings.min,settings.max));
-    answers=[]; userAnswers=[]; currentIndex=0;
-    totalNumEl.textContent=exercises.length;
-    scoreBoard.style.visibility='visible';
-    scoreEl.textContent=score; mainScoreEl.textContent=score; levelEl.textContent=level;
-    showScreen('quiz'); showQuestion();
+startQuiz.addEventListener('click', () => {
+  showScreen('quiz');
+  showQuestion();
 });
       restart.addEventListener('click',()=>{ showScreen('mainMenu'); userAnswers=[]; });
       detailClose.addEventListener('click',()=>document.getElementById('detailModal').classList.remove('show'));
