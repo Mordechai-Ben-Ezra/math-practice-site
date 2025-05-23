@@ -123,7 +123,6 @@
       <h2>הגדרות התרגול</h2>
       <div class="input-group"><label for="min">מ</label><input id="min" type="number" min="1" value="1"/></div>
       <div class="input-group"><label for="max">עד</label><input id="max" type="number" min="1" value="10"/></div>
-      <div class="input-group"><label for="count">מספר תרגילים</label><input id="count" type="number" min="1" value="20"/></div>
       <div class="input-group"><label for="timePerQ">זמן לשאלה (שניות)</label><input id="timePerQ" type="number" min="1" value="12"/></div>
       <button id="applySettings" class="hidden">שמור הגדרות</button>
       <button id="resetScore" class="reset-small">אפס ניקוד</button>
@@ -160,7 +159,8 @@
         Object.values(screens).forEach(s => s.classList.remove('active'));
         screens[name].classList.add('active');
       }
-      let settings = { min:1, max:10, count:20, perQ:12 };
+      - let settings = { min:1, max:10, count:20, perQ:12 };
+      + let settings = { min:1, max:10, perQ:12 };
       let selectedTypes = new Set();
       const modeBtns = document.querySelectorAll('.mode-btn');
       const openSettings = document.getElementById('openSettings');
@@ -239,9 +239,7 @@
         }
       });
       startQuiz.addEventListener('click',()=>{
-        exercises=Array.from({length:settings.count},()=>gen(Array.from(selectedTypes),settings.min,settings.max));
         answers=[]; userAnswers=[]; currentIndex=0;
-        totalNumEl.textContent=exercises.length;
         scoreBoard.style.visibility='visible';
         scoreEl.textContent=score; mainScoreEl.textContent=score; levelEl.textContent=level;
         showScreen('quiz'); showQuestion();
@@ -265,7 +263,7 @@
       }
       function showQuestion(){
         clearInterval(countdown);
-        const {q,ans}=exercises[currentIndex];
+        const {q, ans} = gen(Array.from(selectedTypes), settings.min, settings.max);
         currentNumEl.textContent=currentIndex+1;
         questionEl.textContent=q;
         optionsEl.innerHTML='';
@@ -313,23 +311,8 @@
           flyw.addEventListener('animationend',()=>flyw.remove(),{once:true});
         }
         setTimeout(()=>{
-          if(currentIndex+1<exercises.length){ currentIndex++; showQuestion(); }
-          else {
-            showScreen('results');
-            resultsList.innerHTML='';
-            exercises.forEach((ex,i)=>{
-              const li=document.createElement('li'); li.textContent=`תרגיל ${i+1}`;
-              li.addEventListener('click',()=>{
-                document.getElementById('detailTitle').textContent=`תרגיל ${i+1}`;
-                document.getElementById('detailQuestion').textContent=`שאלה: ${ex.q}`;
-                document.getElementById('detailYour').textContent=`תשובתך: ${userAnswers[i]}`;
-                document.getElementById('detailCorrect').textContent=`תשובה נכונה: ${answers[i]}`;
-                document.getElementById('detailModal').classList.add('show');
-              });
-              resultsList.append(li);
-            });
-            soundCh.play();
-          }
+        currentIndex++;
+        showQuestion();
         },1000);
       }
     });
