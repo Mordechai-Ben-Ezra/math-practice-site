@@ -252,6 +252,11 @@
           case 'sub': if(A<B)[A,B]=[B,A]; ans=A-B; q=`${A} - ${B}`; break;
           case 'mul': ans=A*B; q=`${A} × ${B}`; break;
           case 'div': ans=A/B; q=`${A} ÷ ${B}`; break;
+        // ברגע לוחצים על “התחל בתרגול”, מפעילים את המסך ושואלים את השאלה הראשונה
+    startQuiz.addEventListener('click', () => {
+      showScreen('quiz');
+      showQuestion();
+    });
         }
         return {q,ans};
       }
@@ -265,10 +270,6 @@
         const choices=new Set([ans]);
         while(choices.size<4){ let c=Math.floor(Math.random()*((ans+10)-(ans-10)+1))+(ans-10); if(c>=0)choices.add(c); }
         Array.from(choices).sort(()=>Math.random()-0.5).forEach((val,i)=>{
-          const btn=document.createElement('button');
-          btn.textContent=val; btn.className=`option-btn opt${i+1}`;
-          btn.addEventListener('click',()=>selectAnswer(btn,val,ans));
-          optionsEl.append(btn);
       });
         progressBar.value=Math.round(((currentIndex+1)/exercises.length)*100);
         progressText.textContent=`${progressBar.value}%`;
