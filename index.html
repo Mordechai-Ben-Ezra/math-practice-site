@@ -300,7 +300,7 @@
           fly.addEventListener('animationend',()=>fly.remove(),{once:true});
         } else {
           if(btn){ btn.classList.add('wrong'); soundW.play(); }
-          score-=4; delta=-4;
+          score-=7; delta=-7;
           scoreEl.textContent=score; mainScoreEl.textContent=score;
           localStorage.setItem('cumScore',score);
           const flyw=document.createElement('span'); flyw.textContent=delta; flyw.className='zigzagUp zigzagNegative'; document.body.appendChild(flyw);
