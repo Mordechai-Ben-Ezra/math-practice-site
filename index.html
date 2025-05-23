@@ -222,11 +222,13 @@
       });
       openSettings.addEventListener('click',()=>{ applySettings.classList.add('hidden'); showScreen('setup'); });
       closeSetup.addEventListener('click',()=>showScreen('mainMenu'));
-      ['min','max','count','timePerQ'].forEach(id=>document.getElementById(id).addEventListener('input',()=>applySettings.classList.remove('hidden')));
+      ['min','max','timePerQ'].forEach(id=>
+      document.getElementById(id)
+      .addEventListener('input',()=>applySettings.classList.remove('hidden'))
+      );
       applySettings.addEventListener('click',()=>{
         settings.min = Math.max(1,Math.ceil(+document.getElementById('min').value));
         settings.max = Math.max(settings.min,Math.ceil(+document.getElementById('max').value));
-        settings.count = Math.max(1,Math.ceil(+document.getElementById('count').value));
         settings.perQ = Math.max(1,Math.ceil(+document.getElementById('timePerQ').value));
         applySettings.classList.add('hidden'); showScreen('mainMenu');
       });
@@ -276,8 +278,6 @@
           btn.addEventListener('click',()=>selectAnswer(btn,val,ans));
           optionsEl.append(btn);
         });
-        progressBar.value=Math.round(((currentIndex+1)/exercises.length)*100);
-        progressText.textContent=`${progressBar.value}%`;
         timerEl.textContent=settings.perQ;
         countdown=setInterval(()=>{
           let t=+timerEl.textContent-1; timerEl.textContent=t;
