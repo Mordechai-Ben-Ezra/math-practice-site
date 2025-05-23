@@ -159,8 +159,7 @@
         Object.values(screens).forEach(s => s.classList.remove('active'));
         screens[name].classList.add('active');
       }
-      - let settings = { min:1, max:10, count:20, perQ:12 };
-      + let settings = { min:1, max:10, perQ:12 };
+      let settings = { min:1, max:10, perQ:12 };
       let selectedTypes = new Set();
       const modeBtns = document.querySelectorAll('.mode-btn');
       const openSettings = document.getElementById('openSettings');
