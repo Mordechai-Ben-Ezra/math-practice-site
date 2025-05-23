@@ -237,10 +237,6 @@
           scoreEl.textContent=score; mainScoreEl.textContent=score; levelEl.textContent=level;
         }
       });
-startQuiz.addEventListener('click', () => {
-  showScreen('quiz');
-  showQuestion();
-});
       restart.addEventListener('click',()=>{ showScreen('mainMenu'); userAnswers=[]; });
       detailClose.addEventListener('click',()=>document.getElementById('detailModal').classList.remove('show'));
       function gen(types,min,max){
@@ -272,7 +268,7 @@ startQuiz.addEventListener('click', () => {
           btn.textContent=val; btn.className=`option-btn opt${i+1}`;
           btn.addEventListener('click',()=>selectAnswer(btn,val,ans));
           optionsEl.append(btn);
-        });
+      });
         progressBar.value=Math.round(((currentIndex+1)/exercises.length)*100);
         progressText.textContent=`${progressBar.value}%`;
         timerEl.textContent=settings.perQ;
@@ -289,6 +285,10 @@ function selectAnswer(btn,val,correct){
     showQuestion();
   }, 1000);
 }
+startQuiz.addEventListener('click', () => {
+  showScreen('quiz');
+  showQuestion();
+});
     });
   </script>
   <footer>פותח על ידי מרדכי בן עזרא | כל הזכויות שמורות © 2025</footer>
