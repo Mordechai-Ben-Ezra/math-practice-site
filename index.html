@@ -33,7 +33,11 @@
     :root { --primary:#007bff;--success:#28a745;--error:#dc3545;--bg:#f0f4f8;--card:#fff;--text:#333;--radius:8px;--transition:.3s;--opt1:#ffadad;--opt2:#ffd6a5;--opt3:#caffbf;--opt4:#9bf6ff }
     * { box-sizing:border-box }
     body { margin:0;padding:1rem;font-family:'Rubik',sans-serif;background:var(--bg);color:var(--text) }
-    header { text-align:center;padding:1rem }
+    header {
+      position: relative;
+      text-align: center;
+      padding: 1rem;
+    }
     .share-buttons { display:flex;justify-content:center;gap:1rem;margin-top:1rem }
     .share-buttons a { text-decoration:none;font-size:1.2rem;background:var(--primary);color:#fff;padding:.5rem 1rem;border-radius:var(--radius) }
     #appContainer { max-width:800px;margin:auto;background:var(--card);padding:1rem;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.1) }
@@ -43,6 +47,16 @@
     section.active { display:flex;flex-direction:column;gap:1rem }
     #openSettings,#closeSetup { position:absolute;top:1rem;background:none;border:none;font-size:1.5rem;cursor:pointer }
     #openSettings { left:1rem } #closeSetup { right:1rem }
+        /* סגנון לכפתור הבית בפינה הימנית־עליונה */
+    #homeBtn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
     .modes-row { display:flex;gap:.5rem;width:100% }
     .mode-btn { flex:1;padding:1rem;border:none;border-radius:var(--radius);background:var(--primary);color:#fff;font-size:1.5rem;cursor:pointer }
     .mode-btn.selected { background:var(--success) }
@@ -95,7 +109,8 @@
   <header>
     <h1 id="site-title">🏆 תרגול חשבון חינמי אונליין – תרגילים אינטראקטיביים</h1>
     <p>תרגול חשבון מהנה ואינטראקטיבי עם ניקוד, זמן ורמות קושי משתנות!</p>
-  </header>
+    <button id="homeBtn" title="בית">🏠</button>
+</header>
   <div class="share-buttons">
     <a href="https://wa.me/?text=תרגול%20חשבון%20מנצח:%20https://mordechai-ben-ezra.github.io/math-practice-site" target="_blank">שתף בוואטסאפ</a>
     <a href="mailto:?subject=משחק חשבון מגניב!&body=נסה את תרגול חשבון מנצח: https://mordechai-ben-ezra.github.io/math-practice-site" target="_blank">שלח במייל</a>
@@ -313,7 +328,11 @@
         showQuestion();
         },1000);
       }
-    });
+         // חיבור כפתור הבית לניווט למסך הראשי
+      const homeBtn = document.getElementById('homeBtn');
+      homeBtn.addEventListener('click', () => {
+        showScreen('mainMenu');
+      });
   </script>
   <footer>פותח על ידי מרדכי בן עזרא | כל הזכויות שמורות © 2025</footer>
 
