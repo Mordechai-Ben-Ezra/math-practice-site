@@ -328,7 +328,12 @@
         showQuestion();
         },1000);
        }
-      });
+        // חיבור כפתור הבית לניווט למסך הראשי
+    const homeBtn = document.getElementById('homeBtn');
+    homeBtn.addEventListener('click', () => {
+      showScreen('mainMenu');
+    });
+  });
   </script>
   <footer>פותח על ידי מרדכי בן עזרא | כל הזכויות שמורות © 2025</footer>
 
