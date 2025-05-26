@@ -158,9 +158,9 @@
     </section>
   </main>
   <div id="detailModal"><div class="modal-content"><h3 id="detailTitle"></h3><p id="detailQuestion"></p><p id="detailYour"></p><p id="detailCorrect"></p><button id="detailClose" class="primary">סגור</button></div></div>
-  <audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
-  <audio id="soundWrong" src="https://actions.google.com/sounds/v1/cartoon/metal_hit_and_slide.ogg"></audio>
-  <audio id="soundCheer" src="https://actions.google.com/sounds/v1/cartoon/cheer.ogg"></audio>
+  <audio id="soundCorrect" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+  <audio id="soundWrong"   src="https://actions.google.com/sounds/v1/cartoon/metal_hit_and_slide.ogg" preload="auto"></audio>
+  <audio id="soundCheer"   src="https://actions.google.com/sounds/v1/cartoon/cheer.ogg" preload="auto"></audio>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const screens = {
@@ -303,6 +303,7 @@
         optionsEl.querySelectorAll('button').forEach(b=>{ b.disabled=true; if(+b.textContent===correct) b.classList.add('correct'); });
         let delta=0;
         if(btn&&val===correct){
+          soundC.currentTime = 0;
           soundC.play();
           const rawPts=Math.ceil(+timerEl.textContent*2);
           const pts=Math.min(rawPts,20);
@@ -314,7 +315,8 @@
           const r=btn.getBoundingClientRect(); fly.style.left=(r.left+r.width/2)+'px'; fly.style.top=r.top+'px';
           fly.addEventListener('animationend',()=>fly.remove(),{once:true});
         } else {
-          if(btn){ btn.classList.add('wrong'); soundW.play(); }
+          soundW.currentTime = 0;
+          soundW.play();
           score-=7; delta=-7;
           scoreEl.textContent=score; mainScoreEl.textContent=score;
           localStorage.setItem('cumScore',score);
