@@ -354,7 +354,9 @@
         // חיבור כפתור הבית לניווט למסך הראשי
     const homeBtn = document.getElementById('homeBtn');
     homeBtn.addEventListener('click', () => {
-      showScreen('mainMenu');
+      clearInterval(countdown);            // עוצר את הטיימר
+      scoreBoard.style.visibility = 'hidden'; // מסתיר את לוח הנקודות
+      showScreen('mainMenu');              // מעביר למסך הבית
     });
   });
   </script>
