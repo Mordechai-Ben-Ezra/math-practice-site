@@ -119,6 +119,7 @@
     <!-- Main Menu -->
     <section id="mainMenu" class="active">
       <button id="openSettings">⚙️</button>
+      <button id="toggleSound" title="הפעל/כבה צלילים" style="margin-left:0.5rem">🔊</button>
       <div id="mainScoreboard">נקודות מצטברות: <span id="mainScore">0</span></div>
       <div id="levelDisplay">רמה: <span id="level">1</span></div>
       <div class="modes-row">
@@ -178,6 +179,16 @@
       let selectedTypes = new Set();
       const modeBtns = document.querySelectorAll('.mode-btn');
       const openSettings = document.getElementById('openSettings');
+      const toggleSound = document.getElementById('toggleSound');  
+      // ברירת מחדל: צלילים מופעלים אלא אם צוין אחרת  
+      let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';  
+      // עדכון האייקון בהתאם למצב  
+      toggleSound.textContent = soundEnabled ? '🔊' : '🔇';  
+      toggleSound.addEventListener('click', () => {  
+        soundEnabled = !soundEnabled;  
+        localStorage.setItem('soundEnabled', soundEnabled);  
+        toggleSound.textContent = soundEnabled ? '🔊' : '🔇';  
+      });  
       const closeSetup = document.getElementById('closeSetup');
       const applySettings = document.getElementById('applySettings');
       const startQuiz = document.getElementById('startQuiz');
@@ -305,8 +316,10 @@
         optionsEl.querySelectorAll('button').forEach(b=>{ b.disabled=true; if(+b.textContent===correct) b.classList.add('correct'); });
         let delta=0;
         if(btn&&val===correct){
-          soundC.currentTime = 0;
-          soundC.play();
+          if(soundEnabled){  
+            soundC.currentTime = 0;  
+            soundC.play();  
+          }  
           const rawPts=Math.ceil(+timerEl.textContent*2);
           const pts=Math.min(rawPts,20);
           score+=pts; delta=pts;
@@ -317,10 +330,12 @@
           const r=btn.getBoundingClientRect(); fly.style.left=(r.left+r.width/2)+'px'; fly.style.top=r.top+'px';
           fly.addEventListener('animationend',()=>fly.remove(),{once:true});
         } else {
-          soundW.currentTime = 0;
-          soundW.play();
-          soundF.currentTime = 0;
-          soundF.play();
+          if(soundEnabled){  
+            soundW.currentTime = 0;  
+            soundW.play();  
+            soundF.currentTime = 0;  
+            soundF.play();
+          }
           score-=7; delta=-7;
           scoreEl.textContent=score; mainScoreEl.textContent=score;
           localStorage.setItem('cumScore',score);
