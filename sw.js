@@ -1,13 +1,13 @@
 // sw.js - Service Worker for PWA caching
 const CACHE_NAME = 'math-practice-cache-v1';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/site.webmanifest',
-  '/android-chrome-192x192.png',
-  '/android-chrome-512x512.png',
-  '/favicon-16x16.png',
-  '/favicon-32x32.png'
+  '.',
+  'index.html',
+  'site.webmanifest',
+  'android-chrome-192x192.png',
+  'android-chrome-512x512.png',
+  'favicon-16x16.png',
+  'favicon-32x32.png'
 ];
 
 self.addEventListener('install', event => {
