@@ -185,6 +185,11 @@
       function showScreen(name) {
         Object.values(screens).forEach(s => s.classList.remove('active'));
         screens[name].classList.add('active');
+        if (name === 'mainMenu') {
+          homeBtn.style.display = 'none';
+        } else {
+          homeBtn.style.display = 'block';
+        }
       }
       let settings = { min:1, max:10, perQ:12 };
       let selectedTypes = new Set();
