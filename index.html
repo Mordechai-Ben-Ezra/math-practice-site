@@ -258,6 +258,7 @@
         });
       });
       openSettings.addEventListener('click', () => {
+        clearInterval(countdown);
         applySettings.classList.add('hidden');
         openSettings.style.display = 'none';
         toggleSound.style.display  = 'none';
