@@ -191,6 +191,7 @@
       const modeBtns = document.querySelectorAll('.mode-btn');
       const openSettings = document.getElementById('openSettings');
       const toggleSound = document.getElementById('toggleSound');  
+      const homeBtn     = document.getElementById('homeBtn');
       // ברירת מחדל: צלילים מופעלים אלא אם צוין אחרת  
       let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';  
       // עדכון האייקון בהתאם למצב  
@@ -364,7 +365,6 @@
         },1000);
        }
         // חיבור כפתור הבית לניווט למסך הראשי
-    מאזין אחד לחצן 🏠 שיסגור את ההגדרות ויחזיר את הכפתורים
     homeBtn.addEventListener('click', () => {
       clearInterval(countdown);
       scoreBoard.style.visibility = 'hidden';
