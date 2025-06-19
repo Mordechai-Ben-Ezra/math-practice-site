@@ -260,8 +260,19 @@
           startQuiz.classList.toggle('hidden', selectedTypes.size===0);
         });
       });
-      openSettings.addEventListener('click',()=>{ applySettings.classList.add('hidden'); showScreen('setup'); });
-      closeSetup.addEventListener('click',()=>showScreen('mainMenu'));
+      openSettings.addEventListener('click', () => {
+        applySettings.classList.add('hidden');
+        openSettings.style.display = 'none';
+        toggleSound.style.display  = 'none';
+        showScreen('setup');
+      });
+
+      closeSetup.addEventListener('click', () => {
+        showScreen('mainMenu');
+        openSettings.style.display = 'block';
+        toggleSound.style.display  = 'block';
+      });
+
       ['min','max','timePerQ'].forEach(id=>
       document.getElementById(id)
       .addEventListener('input',()=>applySettings.classList.remove('hidden'))
