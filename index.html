@@ -222,7 +222,7 @@
       const soundW = document.getElementById('soundWrong');
       const soundCh = document.getElementById('soundCheer');
       const soundF = document.getElementById('soundFail');
-      let exercises = [], answers = [], userAnswers = [], currentIndex = 0, countdown;
+      let exercises = [], answers = [], userAnswers = [], currentIndex = 0, countdown, nextQuestionTimeout;
       let score = parseInt(localStorage.getItem('cumScore'))||0;
       let level = parseInt(localStorage.getItem('level'))||1;
       mainScoreEl.textContent = score;
@@ -259,6 +259,7 @@
       });
       openSettings.addEventListener('click', () => {
         clearInterval(countdown);
+        clearTimeout(nextQuestionTimeout);
         applySettings.classList.add('hidden');
         openSettings.style.display = 'none';
         toggleSound.style.display  = 'none';
@@ -360,7 +361,7 @@
           flyw.style.left=(r.left+r.width/2)+'px'; flyw.style.top=r.top+'px';
           flyw.addEventListener('animationend',()=>flyw.remove(),{once:true});
         }
-        setTimeout(()=>{
+        nextQuestionTimeout = setTimeout(()=>{
         currentIndex++;
         showQuestion();
         },1000);
