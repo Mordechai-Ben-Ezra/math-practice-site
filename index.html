@@ -269,11 +269,17 @@
       document.getElementById(id)
       .addEventListener('input',()=>applySettings.classList.remove('hidden'))
       );
-      applySettings.addEventListener('click',()=>{
-        settings.min = Math.max(1,Math.ceil(+document.getElementById('min').value));
-        settings.max = Math.max(settings.min,Math.ceil(+document.getElementById('max').value));
-        settings.perQ = Math.max(1,Math.ceil(+document.getElementById('timePerQ').value));
-        applySettings.classList.add('hidden'); showScreen('mainMenu');
+      applySettings.addEventListener('click', () => {
+        // 1. עדכון ההגדרות מתוך השדות במסך
+        settings.min  = Math.max(1,  Math.ceil(+document.getElementById('min').value));
+        settings.max  = Math.max(settings.min, Math.ceil(+document.getElementById('max').value));
+        settings.perQ = Math.max(1,  Math.ceil(+document.getElementById('timePerQ').value));
+        // 2. הסתרת כפתור השמירה והחזרה לתפריט הראשי
+        applySettings.classList.add('hidden');
+        showScreen('mainMenu');
+        // 3. החזרת הכפתורים ⚙️ ו־🔊 למסך הראשי
+        openSettings.style.display = 'block';
+        toggleSound.style.display  = 'block';
       });
       resetScore.addEventListener('click',()=>{
         if(confirm('האם אתה בטוח שברצונך לאפס את הנקוד?')) {
