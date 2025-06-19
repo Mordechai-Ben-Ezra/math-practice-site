@@ -50,6 +50,17 @@
     #openSettings { left:1rem }
     #toggleSound  { left:3rem }
     #closeSetup  { right:1rem }
+    /* תמיד להציג את כפתורי ההגדרות והשמע קבועים במסך */
+    #openSettings,
+    #toggleSound {
+      position: fixed;
+      top: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
         /* סגנון לכפתור הבית בפינה הימנית־עליונה */
     #homeBtn {
       position: absolute;
@@ -113,6 +124,8 @@
     <h1 id="site-title">🏆 תרגול חשבון חינמי אונליין – תרגילים אינטראקטיביים</h1>
     <p>תרגול חשבון מהנה ואינטראקטיבי עם ניקוד, זמן ורמות קושי משתנות!</p>
     <button id="homeBtn" title="בית">🏠</button>
+    <button id="openSettings">⚙️</button>
+    <button id="toggleSound" title="הפעל/כבה צלילים">🔊</button>
 </header>
   <div class="share-buttons">
     <a href="https://wa.me/?text=תרגול%20חשבון%20מנצח:%20https://mordechai-ben-ezra.github.io/math-practice-site" target="_blank">שתף בוואטסאפ</a>
@@ -121,8 +134,6 @@
   <main id="appContainer">
     <!-- Main Menu -->
     <section id="mainMenu" class="active">
-      <button id="openSettings">⚙️</button>
-      <button id="toggleSound" title="הפעל/כבה צלילים">🔊</button>
       <div id="mainScoreboard">נקודות מצטברות: <span id="mainScore">0</span></div>
       <div id="levelDisplay">רמה: <span id="level">1</span></div>
       <div class="modes-row">
