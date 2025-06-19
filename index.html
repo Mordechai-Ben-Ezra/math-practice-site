@@ -367,13 +367,14 @@
         },1000);
        }
         // חיבור כפתור הבית לניווט למסך הראשי
-    homeBtn.addEventListener('click', () => {
-      clearInterval(countdown);
-      scoreBoard.style.visibility = 'hidden';
-      showScreen('mainMenu');
-      openSettings.style.display = 'block';
-      toggleSound.style.display  = 'block';
-    });
+     homeBtn.addEventListener('click', () => {
+       clearInterval(countdown);
+       clearTimeout(nextQuestionTimeout);
+       scoreBoard.style.visibility = 'hidden';
+       showScreen('mainMenu');
+       openSettings.style.display = 'block';
+       toggleSound.style.display  = 'block';
+     });
   });
   </script>
   <footer>פותח על ידי מרדכי בן עזרא | כל הזכויות שמורות © 2025</footer>
