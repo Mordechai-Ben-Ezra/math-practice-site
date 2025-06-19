@@ -200,7 +200,6 @@
         localStorage.setItem('soundEnabled', soundEnabled);  
         toggleSound.textContent = soundEnabled ? '🔊' : '🔇';  
       });  
-      const closeSetup = document.getElementById('closeSetup');
       const applySettings = document.getElementById('applySettings');
       const startQuiz = document.getElementById('startQuiz');
       const resetScore = document.getElementById('resetScore');
@@ -263,13 +262,6 @@
         toggleSound.style.display  = 'none';
         showScreen('setup');
       });
-
-      closeSetup.addEventListener('click', () => {
-        showScreen('mainMenu');
-        openSettings.style.display = 'block';
-        toggleSound.style.display  = 'block';
-      });
-
       ['min','max','timePerQ'].forEach(id=>
       document.getElementById(id)
       .addEventListener('input',()=>applySettings.classList.remove('hidden'))
@@ -372,11 +364,13 @@
         },1000);
        }
         // חיבור כפתור הבית לניווט למסך הראשי
-    const homeBtn = document.getElementById('homeBtn');
+    מאזין אחד לחצן 🏠 שיסגור את ההגדרות ויחזיר את הכפתורים
     homeBtn.addEventListener('click', () => {
-      clearInterval(countdown);            // עוצר את הטיימר
-      scoreBoard.style.visibility = 'hidden'; // מסתיר את לוח הנקודות
-      showScreen('mainMenu');              // מעביר למסך הבית
+      clearInterval(countdown);
+      scoreBoard.style.visibility = 'hidden';
+      showScreen('mainMenu');
+      openSettings.style.display = 'block';
+      toggleSound.style.display  = 'block';
     });
   });
   </script>
